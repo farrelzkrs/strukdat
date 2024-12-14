@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+#deklarasi struct
 typedef struct QueueNode {
     char tugas[50];
     struct QueueNode *next;
