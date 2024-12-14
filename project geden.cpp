@@ -53,7 +53,7 @@ AnggotaNode *Creatnodepekerja(const char *nama){
     strcpy(newnode->nama,nama);
     cekQueue(&newnode->To_do_list);
     newnode->next = NULL;
-    newnode->prev = nullptr;
+    newnode->prev = NULL;
     return newnode;
 }
 void tambahkanpekerja(listpekerja *list, const char *nama){
