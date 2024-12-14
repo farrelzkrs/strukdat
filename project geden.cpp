@@ -16,8 +16,8 @@ typedef struct{
 typedef struct AnggotaNode{
     char nama[50];
     Queue To_do_list;
-    struct AnggotaNode* next;
     struct AnggotaNode* prev;
+    struct AnggotaNode* next;
 }AnggotaNode;
 
 typedef struct {
@@ -52,8 +52,8 @@ AnggotaNode *Creatnodepekerja(const char *nama){
     }
     strcpy(newnode->nama,nama);
     cekQueue(&newnode->To_do_list);
-    newnode->next;
-    newnode->prev;
+    newnode->next = NULL;
+    newnode->prev = nullptr;
     return newnode;
 }
 void tambahkanpekerja(listpekerja *list, const char *nama){
@@ -65,6 +65,44 @@ void tambahkanpekerja(listpekerja *list, const char *nama){
         nodebaru-> prev =list ->Pnew;
         list->Pnew = nodebaru;
     }
+    printf("pekerja %s baru saja di tambahkan\n", nama);
+}
+
+void tampilkananggota(listpekerja *list){
+    if(list->head == NULL){
+        printf("tidak ada pekerja");
+        return;
+    }
+    AnggotaNode* data = list->head;
+    printf("pekerja: ");
+    while(data != NULL){
+        printf("%s\t", data->nama);
+        data = data->next;
+    }
+    printf("\n");
+}
+
+void enqueue(Queue *queue, const char *jobdeks){
+    QueueNode *tugas = CreatQueueuNode(jobdeks);
+    if(queue->belakang == NULL){
+        queue->depan = queue->belakang = tugas;
+    }else{
+        queue->belakang->next = tugas;
+        queue->belakang = tugas;
+    }
+    printf("tugas %s baru saja ditambahkan\n");
+}
+
+void tambahkan_Jobdeks(listpekerja *list, const char *namapekerja, const char *jobdeks){
+    AnggotaNode *data = list->head;
+    while(data != NULL){
+        if (strcmp(data->nama, namapekerja) == 0){
+            enqueue(&data->To_do_list, jobdeks);
+            return;
+        }
+        data = data->next;
+    }
+    printf("nama %s tidak ditemukan dalam tim\n", namapekerja);
 }
 
 int main(){
@@ -76,21 +114,30 @@ int main(){
     do{
         printf("menu\n");
         printf("1. tambahkan pekerja\n");
+        printf("2. tambahkan jobdeks\n");
         printf("masukan pilihan:");
         scanf("%d", &pilih);
         getchar();
         switch (pilih){
             case 1:
-                printf("masukan nama pekerja");
+                printf("masukan nama pekerja: ");
                 fgets(nama, sizeof(nama), stdin);
                 nama[strcspn(nama,"\n")] = 0;
                 tambahkanpekerja(&keperluan, nama);
                 break;
             case 2:
+                tampilkananggota(&keperluan);
+                printf("masukan nama pekerja: ");
+                fgets(nama, sizeof(nama), stdin);
+                nama[strcspn(nama,"\n")] = 0;
+                printf("masukan jobdeks: ");
+                fgets(jobdeks, sizeof(jobdeks), stdin);
+                jobdeks[strcspn(jobdeks,"\n")] = 0;
+                tambahkan_Jobdeks(&keperluan, nama, jobdeks);
                 break;
             default:
                 break;
         }
-    }while(pilih != 1);
+    }while(pilih != 3);
     return 0;
 }
