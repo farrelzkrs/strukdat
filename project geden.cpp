@@ -4,6 +4,7 @@
 
 typedef struct QueueNode {
     char tugas[50];
+    struct SubTugas *subTugas;
     struct QueueNode *next;
 }QueueNode;
 
@@ -11,6 +12,12 @@ typedef struct{
     QueueNode *depan;
     QueueNode *belakang;
 }Queue;
+
+typedef struct SubTugas {
+    char topping[300];
+    struct SubTugas *kiri;
+    struct SubTugas *kanan;
+}
 
 typedef struct AnggotaNode{
     char nama[50];
@@ -40,8 +47,12 @@ QueueNode *CreatQueueuNode(const char *tugas){
         exit(EXIT_FAILURE);
     }
     strcpy(newNode->tugas, tugas);
+    newNode->subTugas = NULL;
     newNode->next = NULL;
     return newNode;
+}
+SubTugas *CreatSubTugas(const char *topping) {
+    SubTugas *newSub = (SubTugas *)malloc(sizeof(SubTugas));
 }
 AnggotaNode *Creatnodepekerja(const char *nama){
     AnggotaNode *newnode = (AnggotaNode*)malloc(sizeof(AnggotaNode));
