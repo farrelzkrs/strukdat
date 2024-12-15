@@ -104,9 +104,48 @@ void tambahkan_Jobdeks(listpekerja *list, const char *namapekerja, const char *j
     printf("nama %s tidak ditemukan dalam tim\n", namapekerja);
 }
 
+void jobdeks_selesai(Queue *queue){
+    if(queue->depan == NULL){
+        printf("tidak ada pekerjaan");
+    }
+    QueueNode *data = queue ->depan;
+    printf("tugas %s telah selesai", data->tugas);
+    queue->depan = queue->depan->next;
+    if(queue->depan == NULL){
+        queue->belakang = NULL;
+    }
+    free(data);
+}
+
+void tampilkan_jobdeks(Queue *queue){
+    if(queue->depan == NULL){
+        printf("mengangur");
+    }else {
+        QueueNode *data = queue ->depan;
+        printf("list jobdeks");
+        while (data != NULL){
+            printf("  %s\n", data);
+            data = data ->next;
+        }
+        
+    }
+}
+void tampilkan(listpekerja *list){
+    if(list->head == NULL){
+        printf("tidak ada pekerja");
+        return;
+    }
+    AnggotaNode* data = list->head;
+    while(data != NULL){
+        printf("pekerja:%s\n", data->nama);
+        tampilkan_jobdeks(&data->To_do_list);
+        data = data->next;
+    }
+}
 int main(){
     listpekerja keperluan;
     cekperkeja(&keperluan);
+    AnggotaNode *data;
     int pilih;
     char nama[50];
     char jobdeks[50];
@@ -114,6 +153,8 @@ int main(){
         printf("menu\n");
         printf("1. tambahkan pekerja\n");
         printf("2. tambahkan jobdeks\n");
+        printf("3. pekerjaan yang sudah selesai\n");
+        printf("4. tampilkan jobdeks pekerja\n");
         printf("masukan pilihan:");
         scanf("%d", &pilih);
         getchar();
@@ -134,9 +175,27 @@ int main(){
                 jobdeks[strcspn(jobdeks,"\n")] = 0;
                 tambahkan_Jobdeks(&keperluan, nama, jobdeks);
                 break;
+            case 3:
+                tampilkananggota(&keperluan);
+                fgets(nama, sizeof(nama), stdin);
+                nama[strcspn(nama, "\n")] = 0;
+                data = keperluan.head;
+                while (data != NULL) {
+                    if (strcmp(data->nama, nama) == 0) {
+                        jobdeks_selesai(&data->To_do_list);
+                        break;
+                    }
+                    data = data->next;
+                }
+                if (data == NULL) {
+                    printf("Worker '%s' not found.\n", nama);
+                }
+                break;
+            case 4:
+                tampilkan(&keperluan);
             default:
                 break;
         }
-    }while(pilih != 3);
+    }while(pilih != 5);
     return 0;
 }
